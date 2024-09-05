@@ -30,7 +30,7 @@ def variable_inputs(data_path_a: str, data_path_b: str, data_path_c: str) -> Nam
 
     results = run_domino_job_task(
         flyte_task_name="Merge data",
-        command="prod/adam-variable.py",
+        command="prod/adam-variable.sas",
         environment_name="SAS Analytics Pro",
         inputs=[
             Input(name="data_path_a", type=str, value=data_path_a),

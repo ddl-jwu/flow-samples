@@ -1,11 +1,12 @@
 from flytekit import workflow
+from typing import TypeVar
 from flytekit.types.file import FlyteFile
 from flytekitplugins.domino.helpers import Input, Output, run_domino_job_task
 
 '''
 To run this flow, execute the command below:
 
-pyflyte run --remote workflow.py variable_inputs --data_path_a /mnt/data/snapshots/DatasetA/1 --data_path_b /mnt/data/snapshots/DatasetB/1 --data_path_c /mnt/data/snapshots/DatasetC/1
+pyflyte run --remote workflow.py multiple_inputs --data_path_a /mnt/data/snapshots/DatasetA/1 --data_path_b /mnt/data/snapshots/DatasetB/1 --data_path_c /mnt/data/snapshots/DatasetC/1
 
 '''
 @workflow

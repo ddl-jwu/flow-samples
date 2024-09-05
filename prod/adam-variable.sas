@@ -27,7 +27,7 @@ libname datasetC "&data_path_c.";
 
 /* Write the final ADAM output */
 data outputs.adam;
-    merge datasetA.sv datasetB.ts datasetC.ta
+    merge datasetA.sv datasetB.ts datasetC.ta;
 run;
 
 

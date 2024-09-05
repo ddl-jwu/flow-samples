@@ -6,7 +6,7 @@ libname datasetC "/mnt/data/snapshots/DatasetC/1";
 
 /* Write the final ADAM output */
 data outputs.adam;
-    merge datasetA.sv datasetB.ts datasetC.ta
+    merge datasetA.sv datasetB.ts datasetC.ta;
 run;
 
 

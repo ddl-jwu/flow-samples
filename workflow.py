@@ -6,7 +6,7 @@ from flytekitplugins.domino.task import DominoJobConfig, DominoJobTask, GitRef, 
 
 # pyflyte run --remote workflow.py hardcoded_inputs
 @workflow
-def hardcoded_inputs() -> NamedTuple("final_outputs", report=FlyteFile[TypeVar("pdf")]):
+def hardcoded_inputs() -> FlyteFile[TypeVar("pdf")]:
 
     data_outputs = run_domino_job_task(
         flyte_task_name="Merge data",
@@ -26,7 +26,7 @@ def hardcoded_inputs() -> NamedTuple("final_outputs", report=FlyteFile[TypeVar("
         flyte_task_name="Create report",
         command="prod/tfl_report.sas",
         environment_name="SAS Analytics Pro",
-        inputs=[Input(name="adam", type=FlyteFile[TypeVar("sas7bdat")], value=data_outputs["adam"])]
+        inputs=[Input(name="adam", type=FlyteFile[TypeVar("sas7bdat")], value=data_outputs["adam"])],
         output_specs=[Output(name="report", type=FlyteFile[TypeVar("pdf")])],
         use_project_defaults_for_omitted=True
     )
@@ -35,9 +35,9 @@ def hardcoded_inputs() -> NamedTuple("final_outputs", report=FlyteFile[TypeVar("
 
 # pyflyte run --remote workflow.py variable_inputs --data_path_a /mnt/data/snapshots/DatasetA/1 --data_path_b /mnt/data/snapshots/DatasetB/1 --data_path_c /mnt/data/snapshots/DatasetC/1
 @workflow
-def variable_inputs(data_path_a: str, data_path_b: str, data_path_c: str) -> NamedTuple("final_outputs", adam=FlyteFile[TypeVar("sas7bdat")]):
+def variable_inputs(data_path_a: str, data_path_b: str, data_path_c: str) -> FlyteFile[TypeVar("sas7bdat")]:
 
-    results = run_domino_job_task(
+    data_outputs = run_domino_job_task(
         flyte_task_name="Merge data",
         command="prod/adam-variable.sas",
         environment_name="SAS Analytics Pro",
@@ -50,4 +50,13 @@ def variable_inputs(data_path_a: str, data_path_b: str, data_path_c: str) -> Nam
         use_project_defaults_for_omitted=True
     )
 
-    return results["adam"]
+    report_outputs = run_domino_job_task(
+        flyte_task_name="Create report",
+        command="prod/tfl_report.sas",
+        environment_name="SAS Analytics Pro",
+        inputs=[Input(name="adam", type=FlyteFile[TypeVar("sas7bdat")], value=data_outputs["adam"])],
+        output_specs=[Output(name="report", type=FlyteFile[TypeVar("pdf")])],
+        use_project_defaults_for_omitted=True
+    )
+
+    return report_outputs["report"]
